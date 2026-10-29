@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://b3nbgt71abaer"
+path="res://.godot/imported/particle_compute.glsl-8a4e16b3670c9b8e19ef0026e3ad61b8.res"
+
+[deps]
+
+source_file="res://shaders/particle_compute.glsl"
+dest_files=["res://.godot/imported/particle_compute.glsl-8a4e16b3670c9b8e19ef0026e3ad61b8.res"]
+
+[params]
+

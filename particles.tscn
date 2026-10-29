@@ -1,0 +1,131 @@
+[gd_scene format=4 uid="uid://486lscucon64"]
+
+[ext_resource type="Script" uid="uid://cl03erwa44deh" path="res://scripts/particle_controller.gd" id="1_script"]
+[ext_resource type="Shader" uid="uid://c2ghwi8k38kch" path="res://shaders/particle_render.gdshader" id="2_particles"]
+[ext_resource type="PackedScene" uid="uid://boopf2qpnscon" path="res://models/d20.fbx" id="3_d20"]
+[ext_resource type="Texture2D" uid="uid://ed3o6oclcnd6" path="res://textures/d20.png" id="4_d20_texture"]
+[ext_resource type="Texture2D" uid="uid://cfftcf4at6mid" path="res://textures/sphere.png" id="5_sphere_texture"]
+[ext_resource type="Shader" uid="uid://l7sdao8ow5i8" path="res://shaders/film_grain.gdshader" id="6_grain"]
+
+[sub_resource type="ProceduralSkyMaterial" id="AmbientSkyMaterial"]
+
+[sub_resource type="Sky" id="AmbientSky"]
+sky_material = SubResource("AmbientSkyMaterial")
+
+[sub_resource type="Environment" id="Environment"]
+background_mode = 1
+background_color = Color(0.035, 0.045, 0.075, 1)
+sky = SubResource("AmbientSky")
+ambient_light_source = 3
+ambient_light_color = Color(0.6, 0.67, 0.82, 1)
+ambient_light_sky_contribution = 0.25
+ambient_light_energy = 0.75
+reflected_light_source = 2
+glow_enabled = true
+glow_intensity = 1.0
+glow_strength = 0.7
+glow_blend_mode = 0
+
+[sub_resource type="StandardMaterial3D" id="SphereMaterial"]
+cull_mode = 2
+diffuse_mode = 1
+specular_mode = 2
+albedo_texture = ExtResource("5_sphere_texture")
+roughness = 0.5
+
+[sub_resource type="SphereMesh" id="SphereMesh"]
+material = SubResource("SphereMaterial")
+radius = 6.0
+height = 12.0
+
+[sub_resource type="StandardMaterial3D" id="D20Material"]
+albedo_texture = ExtResource("4_d20_texture")
+roughness = 0.5
+
+[sub_resource type="ShaderMaterial" id="ParticleMaterial"]
+render_priority = 0
+shader = ExtResource("2_particles")
+shader_parameter/d20_planes = PackedVector4Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/particle_size = 0.05
+shader_parameter/far_particle_color = Color(1, 1, 0, 1)
+shader_parameter/near_particle_color = Color(1, 0, 0, 1)
+shader_parameter/velocity_stretch = 0.04
+shader_parameter/glow_color = Color(1, 1, 1, 1)
+shader_parameter/glow_intensity = 4.0
+shader_parameter/glow_sharpness = 2.0
+shader_parameter/d20_world_to_local = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+shader_parameter/d20_plane_count = 0
+
+[sub_resource type="MultiMesh" id="ParticleMultiMesh"]
+transform_format = 1
+
+[sub_resource type="ShaderMaterial" id="FilmGrainMaterial"]
+shader = ExtResource("6_grain")
+shader_parameter/film_grain_amount = 0.5
+shader_parameter/frame_index = 0
+
+[sub_resource type="SystemFont" id="HUDFont"]
+font_names = PackedStringArray("sans-serif")
+font_weight = 700
+subpixel_positioning = 0
+
+[node name="Particles" type="Node3D" unique_id=1299906707]
+script = ExtResource("1_script")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2111622686]
+environment = SubResource("Environment")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=249495425]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+current = true
+fov = 60.0
+near = 1.0
+far = 12.0
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2100608717]
+transform = Transform3D(0.8660254, -0.38302222, 0.32139382, 0, 0.64278764, 0.76604444, -0.5, -0.66341394, 0.5566704, 0, 3, 0)
+light_energy = 2.0
+
+[node name="Sphere" type="MeshInstance3D" parent="." unique_id=854728161]
+cast_shadow = 0
+mesh = SubResource("SphereMesh")
+
+[node name="D20" parent="." unique_id=621179710 instance=ExtResource("3_d20")]
+
+[node name="D20" parent="D20" index="0" unique_id=285580535]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
+material_override = SubResource("D20Material")
+
+[node name="Particles" type="MultiMeshInstance3D" parent="." unique_id=1855568787]
+visible = false
+material_override = SubResource("ParticleMaterial")
+cast_shadow = 0
+custom_aabb = AABB(-50, -50, -50, 100, 100, 100)
+multimesh = SubResource("ParticleMultiMesh")
+
+[node name="PostProcessing" type="CanvasLayer" parent="." unique_id=86789040]
+
+[node name="FilmGrain" type="ColorRect" parent="PostProcessing" unique_id=666502758]
+material = SubResource("FilmGrainMaterial")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=919211466]
+layer = 2
+
+[node name="FPS" type="Label" parent="HUD" unique_id=308877696]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 600.0
+offset_bottom = 96.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = SubResource("HUDFont")
+theme_override_font_sizes/font_size = 16
+text = "Particles: 500
+FPS: --"
+
+[editable path="D20"]
