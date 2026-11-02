@@ -2,6 +2,10 @@
 
 A particle simulation in Godot using compute shaders and the Forward+ renderer. Particles bounce off a rotating D20 object and respawn on an outer sphere.
 
+![1.png](docs/images/1.png)
+
+![2.png](docs/images/2.png)
+
 ## Features
 
 - GPU particle simulation and collisions with the D20 object.
@@ -15,8 +19,8 @@ A particle simulation in Godot using compute shaders and the Forward+ renderer. 
 ## Requirements
 
 - **Godot 4.7.2**.
-- The **Forward+ renderer** and a GPU and graphics API that support [Godot compute shaders](https://docs.godotengine.org/en/stable/tutorials/shaders/compute_shaders.html).
-- Compatibility rendering and Web exports are unsupported because the simulation requires `RenderingDevice` compute shaders.
+- The **Forward+ renderer** and a GPU and graphics API that support compute shaders.
+- The Compatibility renderer and web exports are unsupported because the simulation requires compute shaders.
 
 ## Run the demo
 
@@ -24,9 +28,9 @@ A particle simulation in Godot using compute shaders and the Forward+ renderer. 
 2. In Godot's Project Manager, select **Import** and choose `project.godot`.
 3. Open the project with Godot **4.7.2**.
 4. Wait for Godot to import the textures, FBX model, and compute shader.
-5. Press **F5** to run the project, or open `particles.tscn` and press **F6** to run the scene.
+5. Click the **Run Project (▶)** button in the top-right toolbar.
 
-The scene starts with **500 particles**. Select the root **Particles** node in the Scene tree to adjust its **ParticleController** settings in the Inspector before running. During playback, use the **Remote** scene tree to change runtime values. The D20 object rotates automatically.
+The scene starts with **500 particles**. Select the root **Particles** node in the Scene tree to adjust its settings in the Inspector. During playback, switch to the **Remote** scene tree and select the same node to adjust runtime settings. Runtime changes are temporary. The D20 object rotates automatically.
 
 ## Settings
 
@@ -41,7 +45,7 @@ The scene starts with **500 particles**. Select the root **Particles** node in t
 | Enable Glow / Glow Color / Glow Intensity / Glow Sharpness | Control the glow within each particle. |
 | Bloom Amount / Film Grain Amount | Control the post-processing effects. |
 
-Changing Particle Count recreates the GPU particle buffer and textures and restarts the particles. The upper limit is a code limit, not a performance guarantee; performance depends on the GPU and settings. Inspector changes made in the Remote scene tree during playback are temporary.
+Changing Particle Count recreates the GPU particle buffer and textures and restarts the particles. Inspector changes made in the Remote scene tree during playback are temporary.
 
 ## Source files
 
