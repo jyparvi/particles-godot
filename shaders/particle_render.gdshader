@@ -6,10 +6,10 @@ uniform sampler2D particle_velocities : filter_nearest, repeat_disable;
 uniform vec4 d20_planes[20];
 
 uniform float particle_size = 0.05f;
-uniform vec4 far_particle_color : source_color = vec4(1.0f, 1.0f, 0.0f, 1.0f);
-uniform vec4 near_particle_color : source_color = vec4(1.0f, 0.0f, 0.0f, 1.0f);
+uniform vec3 far_particle_color : source_color = vec3(1.0f, 1.0f, 0.0f);
+uniform vec3 near_particle_color : source_color = vec3(1.0f, 0.0f, 0.0f);
 uniform float velocity_stretch : hint_range(0.0f, 0.5f) = 0.04f;
-uniform vec4 glow_color : source_color = vec4(1.0f);
+uniform vec3 glow_color : source_color = vec3(1.0f, 1.0f, 1.0f);
 uniform float glow_intensity = 4.0f;
 uniform float glow_sharpness = 2.0f;
 uniform mat4 d20_world_to_local;
@@ -26,7 +26,7 @@ const vec2 QUAD_VERTICES[6] = vec2[6](
     vec2( 1.0f,  1.0f)
 );
 
-varying mediump vec4 particle_color;
+varying mediump vec3 particle_color;
 
 // Approximate the particle's distance to the D20 object's surface.
 float distance_to_d20_surface(vec3 world_position)
@@ -77,7 +77,8 @@ void fragment()
     float edge = 1.0f - smoothstep(0.84f, 1.0f, radius);
     float core = pow(clamp(1.0f - radius, 0.0f, 1.0f), max(glow_sharpness, 0.01f));
     float glow = core * glow_intensity;
-    vec3 color = mix(particle_color.rgb, glow_color.rgb, clamp(glow, 0.0f, 1.0f)) * (1.0f + glow);
+    vec3 color = mix(particle_color, glow_color, clamp(glow, 0.0f, 1.0f)) * (1.0f + glow);
+
     ALBEDO = color;
-    ALPHA = particle_color.a * edge;
+    ALPHA = edge;
 }

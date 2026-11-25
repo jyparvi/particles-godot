@@ -10,12 +10,12 @@ const MaxParticleCount := 1000000
 @export_range(0.0, 10.0, 0.1, "or_greater") var maxSpeed := 4.0
 @export_range(0.0, 0.5, 0.001) var velocityStretch := 0.04
 @export var rotationSpeed := Vector3(10.0, 15.0, 10.0)
-@export var nearParticleColor := Color.RED
-@export var farParticleColor := Color.YELLOW
+@export_color_no_alpha var nearParticleColor := Color.RED
+@export_color_no_alpha var farParticleColor := Color.YELLOW
 
 @export_group("Glow")
 @export var enableGlow := true
-@export var glowColor := Color.WHITE
+@export_color_no_alpha var glowColor := Color.WHITE
 @export_range(0.0, 10.0, 0.01) var glowIntensity := 4.0
 @export_range(0.25, 8.0, 0.01) var glowSharpness := 2.0
 
